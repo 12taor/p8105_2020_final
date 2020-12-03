@@ -337,10 +337,12 @@ expenditure_rate_map
 
 ```{r eval=FALSE, include=FALSE}
 # make color palette
-hostility_pal <- colorNumeric(
+bins <- c("hostile", "leans_hostile", "middle_ground", "leans_supportive", "supportive")
+hostility_pal <- colorBin(
   palette = "inferno",
   domain = data_sf$hostility,
-  reverse = TRUE)
+  reverse = TRUE,
+  bins = bins)
 
 # this method does not work - to create a map for hostility we would need to either:
 # 1) make hostility into a factor variable rather than character (probably would need 

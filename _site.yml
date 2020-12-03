@@ -9,6 +9,8 @@ navbar:
       href: data_visualization.html
     - text: "Regression Analysis"
       href: regression_analysis.html
+    - text: "Maps"
+      href: https://rachelhtao.shinyapps.io/maps/
     - icon: fa-github fa-lg
       href: http://github.com/<maggie-mengyuan-li>/
 output:

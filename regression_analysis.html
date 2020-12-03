@@ -24,6 +24,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <script src="site_libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
 <script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
 <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
@@ -33,6 +35,15 @@
 <script src="site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -295,6 +306,9 @@ $(document).ready(function () {
   <a href="regression_analysis.html">Regression Analysis</a>
 </li>
 <li>
+  <a href="https://rachelhtao.shinyapps.io/maps/">Maps</a>
+</li>
+<li>
   <a href="http://github.com/&lt;maggie-mengyuan-li&gt;/">
     <span class="fa fa-github fa-lg"></span>
      
@@ -336,13 +350,14 @@ $(document).ready(function () {
 
 <p>Load dataset</p>
 <pre class="r"><code>merge_data = read_csv(&quot;data/merge_data.csv&quot;)</code></pre>
-<pre><code>## Parsed with column specification:
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   .default = col_double(),
 ##   state_id = col_character(),
 ##   hostility = col_character()
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
 <div id="exploratory-data-analysis" class="section level1">
 <h1>Exploratory data analysis</h1>
 <div id="rate-of-abortion-by-state" class="section level2">
@@ -448,8 +463,8 @@ subplot(top_abortion_rate, top_expend_abortion, shareX = FALSE, shareY = FALSE,
 ## See vignette(&#39;programming&#39;) for more help
 ## This warning is displayed once every 8 hours.
 ## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
-<div id="htmlwidget-9a2385069bfc63d26400" style="width:900px;height:700px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9a2385069bfc63d26400">{"x":{"data":[{"x":[17.3,18.2,16.1,17.5,15.2,21.7,28.2,16.5,27.4,16],"y":["CA","CT","DE","FL","GA","MD","NJ","NV","NY","RI"],"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"],"line":{"color":"rgba(31,119,180,1)"}},"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[32613,1400,5000,906,5580,453,16306,1152,478,5617],"y":["CA","MA","MD","MN","NJ","NM","NY","OR","VT","WA"],"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"],"line":{"color":"rgba(255,127,14,1)"}},"type":"bar","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x2","yaxis":"y2","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"anchor":"y"},"xaxis2":{"domain":[0.52,1],"automargin":true,"anchor":"y2"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"category","categoryorder":"array","categoryarray":["NM","VT","MN","OR","MA","MD","NJ","WA","NY","CA"],"anchor":"x2"},"yaxis":{"domain":[0,1],"automargin":true,"type":"category","categoryorder":"array","categoryarray":["GA","RI","DE","NV","CA","FL","CT","MD","NY","NJ"],"anchor":"x"},"annotations":[],"shapes":[],"images":[],"width":900,"height":700,"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 10 states with highest total expend","showlegend":false,"hovermode":"closest"},"attrs":{"12b625da59eff":{"x":{},"y":{},"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"12b622469a761":{"x":{},"y":{},"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"source":"A","config":{"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b93a8c41397dd88ed044" style="width:900px;height:700px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b93a8c41397dd88ed044">{"x":{"data":[{"x":[17.3,18.2,16.1,17.5,15.2,21.7,28.2,16.5,27.4,16],"y":["CA","CT","DE","FL","GA","MD","NJ","NV","NY","RI"],"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"],"line":{"color":"rgba(31,119,180,1)"}},"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[32613,1400,5000,906,5580,453,16306,1152,478,5617],"y":["CA","MA","MD","MN","NJ","NM","NY","OR","VT","WA"],"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"],"line":{"color":"rgba(255,127,14,1)"}},"type":"bar","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x2","yaxis":"y2","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"anchor":"y"},"xaxis2":{"domain":[0.52,1],"automargin":true,"anchor":"y2"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"category","categoryorder":"array","categoryarray":["NM","VT","MN","OR","MA","MD","NJ","WA","NY","CA"],"anchor":"x2"},"yaxis":{"domain":[0,1],"automargin":true,"type":"category","categoryorder":"array","categoryarray":["GA","RI","DE","NV","CA","FL","CT","MD","NY","NJ"],"anchor":"x"},"annotations":[],"shapes":[],"images":[],"width":900,"height":700,"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 10 states with highest total expend","showlegend":false,"hovermode":"closest"},"attrs":{"223d45d7fd94":{"x":{},"y":{},"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"223d6749235e":{"x":{},"y":{},"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"source":"A","config":{"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="statistical-analysis" class="section level2">
 <h2>Statistical analysis</h2>
@@ -663,7 +678,7 @@ summary(teenbirth_model)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
