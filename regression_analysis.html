@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Linh Tran" />
+
+<meta name="date" content="2020-11-30" />
+
+<title>Regression analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="site_libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 61px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h2 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h3 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h4 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h5 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.section h6 {
+  padding-top: 66px;
+  margin-top: -66px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="overview.html">Proposal</a>
+</li>
+<li>
+  <a href="data_visualization.html">Visualizations</a>
+</li>
+<li>
+  <a href="regression_analysis.html">Regression Analysis</a>
+</li>
+<li>
+  <a href="https://rachelhtao.shinyapps.io/maps/">Maps</a>
+</li>
+<li>
+  <a href="http://github.com/&lt;maggie-mengyuan-li&gt;/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Regression analysis</h1>
+<h4 class="author">Linh Tran</h4>
+<h4 class="date">11/30/2020</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#exploratory-data-analysis">Exploratory data analysis</a><ul>
+<li><a href="#rate-of-abortion-by-state">Rate of abortion by state</a></li>
+<li><a href="#public-expenditure-by-state">Public expenditure by state</a></li>
+<li><a href="#hostility-towards-abortion-in-policy-by-state-and-abortion-rate">Hostility towards abortion in policy by state and abortion rate</a></li>
+<li><a href="#top-10-states-with-the-highest-abortion-rate">Top 10 states with the highest abortion rate</a></li>
+<li><a href="#statistical-analysis">Statistical analysis</a><ul>
+<li><a href="#is-there-a-relationship-between-rate-of-abortion-and-hostility-towards-abortion-in-policy-by-state-andor-contraceptive-fundingabortion-access-by-state-all-models-here">Is there a relationship between rate of abortion and hostility towards abortion in policy by state and/or contraceptive funding/abortion access by state? <strong>ALL MODELS HERE</strong></a></li>
+<li><a href="#is-there-a-relationship-between-rate-of-abortion-and-public-contraceptive-expenditure-by-state-probably-not-going-to-use">Is there a relationship between rate of abortion and public contraceptive expenditure by state? <strong>probably not going to use</strong></a></li>
+<li><a href="#is-there-a-relationship-between-rate-of-abortion-and-abortion-access-by-state-moved-to-chunk-above">Is there a relationship between rate of abortion and abortion access by state? <strong>moved to chunk above</strong></a></li>
+<li><a href="#is-there-a-relationship-between-teen-birth-rate-and-percent-of-women-in-need-of-publicly-funded-contraceptive-resources-probably-not-going-to-use">Is there a relationship between teen birth rate and percent of women in need of publicly-funded contraceptive resources? <strong>probably not going to use</strong></a></li>
+<li><a href="#is-there-a-relationship-between-rate-of-abortion-and-hostility-towards-abortion-in-policy-by-state-andor-contraceptive-fundingaccess-by-state">Is there a relationship between rate of abortion and hostility towards abortion in policy by state and/or contraceptive funding/access by state ?</a></li>
+<li><a href="#relationship-between-teen-birth-rateabortion-rate-and-insurance-status">Relationship between teen birth rate/abortion rate and insurance status</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<p>Load dataset</p>
+<pre class="r"><code>merge_data = read_csv(&quot;data/merge_data.csv&quot;)</code></pre>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
+## cols(
+##   .default = col_double(),
+##   state_id = col_character(),
+##   hostility = col_character()
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<div id="exploratory-data-analysis" class="section level1">
+<h1>Exploratory data analysis</h1>
+<div id="rate-of-abortion-by-state" class="section level2">
+<h2>Rate of abortion by state</h2>
+<pre class="r"><code>merge_data %&gt;% 
+  mutate(state_id = fct_reorder(state_id, abortion_rate_15_44_state)) %&gt;% 
+  ggplot(aes(x = state_id, y = abortion_rate_15_44_state, fill = state_id)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(
+    x = &quot;State&quot;,
+    y = &quot;Abortion rate&quot;,
+    title = &quot;Rate of abortion per 1000 women aged 15-44 by state of residence&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
+</div>
+<div id="public-expenditure-by-state" class="section level2">
+<h2>Public expenditure by state</h2>
+<pre class="r"><code>merge_data %&gt;% 
+  mutate(state_id = fct_reorder(state_id, expenditure_rate)) %&gt;% 
+  ggplot(aes(x = state_id, y = expenditure_rate, fill = state_id)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(
+    x = &quot;State&quot;,
+    y = &quot;Public expenditure per women in need&quot;,
+    title = &quot;Rate of public expenditure for women aged 15-44 in need of contraception&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+<pre class="r"><code>abortion_rate = 
+  merge_data %&gt;% 
+  ggplot(aes(x = state_id, y = abortion_rate_15_44_state, color = state_id)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(
+    x = &quot;State&quot;,
+    y = &quot;Abortion rate&quot;,
+    title = &quot;Rate of abortion per 1000 women aged 15-44 by state of residence&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;, axis.text.x = element_text(angle = 45, hjust = 1)) 
+ 
+
+public_expenditure =
+  merge_data %&gt;% 
+  ggplot(aes(x = state_id, y = expenditure_rate, color = state_id)) +
+  geom_bar(stat = &quot;identity&quot;) +
+  labs(
+    x = &quot;State&quot;,
+    y = &quot;Public expenditure per women in need&quot;,
+    title = &quot;Rate of public expenditure for women aged 15-44 in need of contraception&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;, axis.text.x = element_text(angle = 45, hjust = 1))
+
+abortion_rate / public_expenditure</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
+</div>
+<div id="hostility-towards-abortion-in-policy-by-state-and-abortion-rate" class="section level2">
+<h2>Hostility towards abortion in policy by state and abortion rate</h2>
+<pre class="r"><code>merge_data %&gt;% 
+  select(state_id, percent_abortion, abortion_rate_15_44_state ,hostility) %&gt;% 
+  mutate(hostility = as.factor(hostility)) %&gt;% 
+  group_by(hostility) %&gt;% 
+  summarize(
+    n = n(),
+    abortion_rate = mean(abortion_rate_15_44_state)
+  ) %&gt;% 
+  mutate(hostility = fct_relevel(hostility, c(&quot;hostile&quot;, &quot;leans_hostile&quot;, &quot;middle_ground&quot;, &quot;leans_supportive&quot;, &quot;supportive&quot;))) %&gt;% 
+  ggplot(aes(x = hostility, y = abortion_rate, fill = hostility)) +
+  geom_bar(stat = &quot;identity&quot;) + 
+  labs(
+    x = &quot;Hostility towards abortion in policy by state&quot;,
+    y = &quot;Average rate of abortion by state&quot;,
+    title = &quot;Hostility and Abortion Rate&quot;
+  )</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<p><img src="regression_analysis_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+</div>
+<div id="top-10-states-with-the-highest-abortion-rate" class="section level2">
+<h2>Top 10 states with the highest abortion rate</h2>
+<pre class="r"><code>top_abortion_rate =
+  merge_data %&gt;% 
+  top_n(10, abortion_rate_15_44_state) %&gt;% 
+  mutate(state_id = fct_reorder(state_id, abortion_rate_15_44_state)) %&gt;% 
+  plot_ly(x = ~abortion_rate_15_44_state, y = ~state_id, type = &#39;bar&#39;, orientation = &#39;h&#39;, width = 900, height = 700, marker = list(color = c(&#39;rgba(222,45,38,1)&#39;, &#39;rgba(222,45,38,1)&#39;, &#39;rgba(222,45,38,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(222,45,38,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;))) %&gt;% 
+  layout(title = &quot;Top 10 states with highest abortion rate&quot;,
+         xaxis = list(title = &quot;Abortion rate&quot;),
+         yaxis = list(title = &quot;State&quot;),
+         showlegend = FALSE)
+
+top_expend_abortion = 
+  merge_data %&gt;% 
+  top_n(10, total_expend_abortion) %&gt;% 
+  mutate(state_id = fct_reorder(state_id, total_expend_abortion)) %&gt;% 
+  plot_ly(x = ~total_expend_abortion, y = ~state_id, type = &#39;bar&#39;, orientation = &#39;h&#39;, width = 900, height = 700, marker = list(color = c(&#39;rgba(222,45,38,1)&#39;, &#39;rgba(222,45,38,1)&#39;, &#39;rgba(204,204,204,1)&#39;,  &#39;rgba(222,45,38,1)&#39;,  &#39;rgba(222,45,38,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;, &#39;rgba(204,204,204,1)&#39;))) %&gt;% 
+  layout(title = &quot;Top 10 states with highest total expend&quot;,
+         xaxis = list(title = &quot;total_expend_abortion&quot;),
+         yaxis = list(title = &quot;State&quot;),
+         showlegend = FALSE)
+
+subplot(top_abortion_rate, top_expend_abortion, shareX = FALSE, shareY = FALSE,
+        titleX = FALSE, titleY = FALSE)</code></pre>
+<pre><code>## Warning: `arrange_()` is deprecated as of dplyr 0.7.0.
+## Please use `arrange()` instead.
+## See vignette(&#39;programming&#39;) for more help
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<div id="htmlwidget-b93a8c41397dd88ed044" style="width:900px;height:700px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b93a8c41397dd88ed044">{"x":{"data":[{"x":[17.3,18.2,16.1,17.5,15.2,21.7,28.2,16.5,27.4,16],"y":["CA","CT","DE","FL","GA","MD","NJ","NV","NY","RI"],"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"],"line":{"color":"rgba(31,119,180,1)"}},"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[32613,1400,5000,906,5580,453,16306,1152,478,5617],"y":["CA","MA","MD","MN","NJ","NM","NY","OR","VT","WA"],"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"],"line":{"color":"rgba(255,127,14,1)"}},"type":"bar","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x2","yaxis":"y2","frame":null}],"layout":{"xaxis":{"domain":[0,0.48],"automargin":true,"anchor":"y"},"xaxis2":{"domain":[0.52,1],"automargin":true,"anchor":"y2"},"yaxis2":{"domain":[0,1],"automargin":true,"type":"category","categoryorder":"array","categoryarray":["NM","VT","MN","OR","MA","MD","NJ","WA","NY","CA"],"anchor":"x2"},"yaxis":{"domain":[0,1],"automargin":true,"type":"category","categoryorder":"array","categoryarray":["GA","RI","DE","NV","CA","FL","CT","MD","NY","NJ"],"anchor":"x"},"annotations":[],"shapes":[],"images":[],"width":900,"height":700,"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Top 10 states with highest total expend","showlegend":false,"hovermode":"closest"},"attrs":{"223d45d7fd94":{"x":{},"y":{},"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"223d6749235e":{"x":{},"y":{},"orientation":"h","marker":{"color":["rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(222,45,38,1)","rgba(222,45,38,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)","rgba(204,204,204,1)"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"source":"A","config":{"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="statistical-analysis" class="section level2">
+<h2>Statistical analysis</h2>
+<div id="is-there-a-relationship-between-rate-of-abortion-and-hostility-towards-abortion-in-policy-by-state-andor-contraceptive-fundingabortion-access-by-state-all-models-here" class="section level3">
+<h3>Is there a relationship between rate of abortion and hostility towards abortion in policy by state and/or contraceptive funding/abortion access by state? <strong>ALL MODELS HERE</strong></h3>
+<pre class="r"><code>merge_data = 
+  merge_data %&gt;% 
+  mutate(hostility = fct_relevel(hostility, c(&quot;hostile&quot;, &quot;leans_hostile&quot;, &quot;middle_ground&quot;, &quot;leans_supportive&quot;, &quot;supportive&quot;)))
+
+# simple linear regression: is there a relationship between hostility towards abortion and access to abortion?
+hostility_bc_access &lt;- lm(percent_women_no_provider ~ hostility, data = merge_data)
+summary(hostility_bc_access)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = percent_women_no_provider ~ hostility, data = merge_data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -33.21 -14.49  -3.25  15.95  46.67 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                 65.300      6.754   9.668 1.48e-12 ***
+## hostilityleans_hostile     -14.089      8.344  -1.688 0.098238 .  
+## hostilitymiddle_ground     -35.967      9.814  -3.665 0.000650 ***
+## hostilityleans_supportive  -40.100      9.552  -4.198 0.000125 ***
+## hostilitysupportive        -57.300     16.544  -3.463 0.001182 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 21.36 on 45 degrees of freedom
+## Multiple R-squared:  0.3976, Adjusted R-squared:  0.3441 
+## F-statistic: 7.427 on 4 and 45 DF,  p-value: 0.0001108</code></pre>
+<pre class="r"><code># simple linear regression: is there a relationship between hostility towards abortion and abortion rates by state?
+hostility_model = lm(abortion_rate_15_44_state ~ hostility, data = merge_data)
+summary(hostility_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = abortion_rate_15_44_state ~ hostility, data = merge_data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -6.511 -3.639 -1.143  2.583 14.589 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                  8.870      1.584   5.599 1.23e-06 ***
+## hostilityleans_hostile       1.046      1.957   0.534   0.5958    
+## hostilitymiddle_ground       3.941      2.302   1.712   0.0938 .  
+## hostilityleans_supportive    5.140      2.241   2.294   0.0265 *  
+## hostilitysupportive          5.830      3.881   1.502   0.1400    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.01 on 45 degrees of freedom
+## Multiple R-squared:  0.1583, Adjusted R-squared:  0.08345 
+## F-statistic: 2.115 on 4 and 45 DF,  p-value: 0.09451</code></pre>
+<pre class="r"><code># simple linear regression: is there a relationship between abortion access and abortion rates by state?
+bc_access_model &lt;- lm(abortion_rate_15_44_state ~ percent_women_no_provider, data = merge_data) 
+summary(bc_access_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = abortion_rate_15_44_state ~ percent_women_no_provider, 
+##     data = merge_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.9229 -2.4099 -0.2392  2.2984 11.6648 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                16.9309     1.0793  15.687  &lt; 2e-16 ***
+## percent_women_no_provider  -0.1319     0.0214  -6.165  1.4e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.95 on 48 degrees of freedom
+## Multiple R-squared:  0.4419, Adjusted R-squared:  0.4303 
+## F-statistic:    38 on 1 and 48 DF,  p-value: 1.404e-07</code></pre>
+<pre class="r"><code># multivariate regression: is there a relationship between abortion access and hostility towards abortion with abortion rates by state?
+hostility_adj_model = lm(abortion_rate_15_44_state ~ hostility + percent_women_no_provider, data = merge_data)
+
+summary(hostility_adj_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = abortion_rate_15_44_state ~ hostility + percent_women_no_provider, 
+##     data = merge_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.6219 -2.4178 -0.2876  2.4971 11.3703 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                17.8774     2.2732   7.865 6.32e-10 ***
+## hostilityleans_hostile     -0.8977     1.6509  -0.544    0.589    
+## hostilitymiddle_ground     -1.0201     2.1455  -0.475    0.637    
+## hostilityleans_supportive  -0.3913     2.1619  -0.181    0.857    
+## hostilitysupportive        -2.0739     3.5723  -0.581    0.565    
+## percent_women_no_provider  -0.1379     0.0286  -4.823 1.73e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.098 on 44 degrees of freedom
+## Multiple R-squared:  0.4494, Adjusted R-squared:  0.3868 
+## F-statistic: 7.181 on 5 and 44 DF,  p-value: 5.471e-05</code></pre>
+</div>
+<div id="is-there-a-relationship-between-rate-of-abortion-and-public-contraceptive-expenditure-by-state-probably-not-going-to-use" class="section level3">
+<h3>Is there a relationship between rate of abortion and public contraceptive expenditure by state? <strong>probably not going to use</strong></h3>
+<pre class="r"><code>bc_fund_model &lt;- lm(abortion_rate_15_44_state ~ expenditure_rate, data = merge_data)
+summary(bc_fund_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = abortion_rate_15_44_state ~ expenditure_rate, data = merge_data)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -6.983 -3.815 -1.200  2.737 16.627 
+## 
+## Coefficients:
+##                  Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        11.763      1.454   8.092  1.6e-10 ***
+## expenditure_rate   -5.673     13.484  -0.421    0.676    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.278 on 48 degrees of freedom
+## Multiple R-squared:  0.003675,   Adjusted R-squared:  -0.01708 
+## F-statistic: 0.177 on 1 and 48 DF,  p-value: 0.6758</code></pre>
+</div>
+<div id="is-there-a-relationship-between-rate-of-abortion-and-abortion-access-by-state-moved-to-chunk-above" class="section level3">
+<h3>Is there a relationship between rate of abortion and abortion access by state? <strong>moved to chunk above</strong></h3>
+<pre class="r"><code>bc_access_model &lt;- lm(abortion_rate_15_44_state ~ percent_women_no_provider, data = merge_data) 
+summary(bc_access_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = abortion_rate_15_44_state ~ percent_women_no_provider, 
+##     data = merge_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.9229 -2.4099 -0.2392  2.2984 11.6648 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                16.9309     1.0793  15.687  &lt; 2e-16 ***
+## percent_women_no_provider  -0.1319     0.0214  -6.165  1.4e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.95 on 48 degrees of freedom
+## Multiple R-squared:  0.4419, Adjusted R-squared:  0.4303 
+## F-statistic:    38 on 1 and 48 DF,  p-value: 1.404e-07</code></pre>
+</div>
+<div id="is-there-a-relationship-between-teen-birth-rate-and-percent-of-women-in-need-of-publicly-funded-contraceptive-resources-probably-not-going-to-use" class="section level3">
+<h3>Is there a relationship between teen birth rate and percent of women in need of publicly-funded contraceptive resources? <strong>probably not going to use</strong></h3>
+<pre class="r"><code>teenbirth_model &lt;- lm(birthrate_15_19_state ~ need_bc_under_20, data = merge_data) 
+summary(teenbirth_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = birthrate_15_19_state ~ need_bc_under_20, data = merge_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -12.175  -4.675  -1.032   3.811  13.814 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       2.106e+01  1.319e+00  15.966   &lt;2e-16 ***
+## need_bc_under_20 -3.660e-06  9.675e-06  -0.378    0.707    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.848 on 48 degrees of freedom
+## Multiple R-squared:  0.002973,   Adjusted R-squared:  -0.0178 
+## F-statistic: 0.1431 on 1 and 48 DF,  p-value: 0.7069</code></pre>
+</div>
+<div id="is-there-a-relationship-between-rate-of-abortion-and-hostility-towards-abortion-in-policy-by-state-andor-contraceptive-fundingaccess-by-state" class="section level3">
+<h3>Is there a relationship between rate of abortion and hostility towards abortion in policy by state and/or contraceptive funding/access by state ?</h3>
+<pre class="r"><code>models_results_df = 
+  merge_data %&gt;% 
+  nest(data = -state_id) %&gt;% 
+  mutate(
+    models = map(.x = data, ~glm(abortion_rate_15_44_state ~ total_expend_abortion + counties_no_provider, data = .x, family = binomial)),
+    results = map(models, broom::tidy)
+  ) %&gt;% 
+  select(state_id, results) %&gt;% 
+  unnest(results) %&gt;% 
+  mutate(
+    OR = exp(estimate),
+    CI_lower = exp(estimate - 1.96 * std.error),
+    CI_upper = exp(estimate + 1.96 * std.error)
+  ) %&gt;% 
+  select(state_id, term, OR, starts_with(&quot;CI&quot;))</code></pre>
+<pre><code>## Error: Problem with `mutate()` input `models`.
+## x y values must be 0 &lt;= y &lt;= 1
+## ℹ Input `models` is `map(...)`.</code></pre>
+</div>
+<div id="relationship-between-teen-birth-rateabortion-rate-and-insurance-status" class="section level3">
+<h3>Relationship between teen birth rate/abortion rate and insurance status</h3>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
