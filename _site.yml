@@ -3,6 +3,7 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
+<<<<<<< HEAD
     - text: "Maps"
       href: https://rachelhtao.shinyapps.io/maps/
     - text: "Dashboard"
@@ -11,6 +12,16 @@ navbar:
       href: full_report.html
     - text: "Resources"
       href: resources.html
+=======
+    - text: "Proposal"
+      href: overview.html
+    - text: "Visualizations"
+      href: data_visualization.html
+    - text: "Regression Analysis"
+      href: regression_analysis.html
+    - text: "Maps"
+      href: https://rachelhtao.shinyapps.io/maps/
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
     - icon: fa-github fa-lg
       href: https://github.com/maggie-mengyuan-li/p8105_2020_final
 output:
