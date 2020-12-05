@@ -21,6 +21,12 @@
 window.FlexDashboardComponents = [];
 </script>
 
+<<<<<<< HEAD
+<script id="flexdashboard-navbar" type="application/json">
+[{"title":"Source Code","icon":"fa-code","href":"source_embed","align":"right"}]
+</script>
+=======
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -28,6 +34,17 @@ window.FlexDashboardComponents = [];
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/stickytableheaders-0.1.19/jquery.stickytableheaders.min.js"></script>
+<<<<<<< HEAD
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/featherlight-1.3.5/featherlight.min.css" rel="stylesheet" />
+<script src="site_libs/featherlight-1.3.5/featherlight.min.js"></script>
+<link href="site_libs/prism-1.4.1/prism.css" rel="stylesheet" />
+<script src="site_libs/prism-1.4.1/prism.js"></script>
+<script src="site_libs/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.2.1/plotly.js"></script>
+=======
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
 <style type="text/css">
 
 /*
@@ -2612,17 +2629,42 @@ window.FlexDashboardComponents.push({
 
 <div id="dashboard-container">
 
+<<<<<<< HEAD
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+=======
 <p>Note: <a href="https://rachelhtao.shinyapps.io/maps/" class="uri">https://rachelhtao.shinyapps.io/maps/</a> was deployed from a separate repository to avoid issues with site building. This file is a copy of that code for reference.</p>
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
 <div id="section-column" class="section level2 sidebar">
 <h2>Column</h2>
+<<<<<<< HEAD
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+=======
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
 </div>
 <div id="section-column-1" class="section level2 tabset">
 <h2>Column</h2>
 <div id="section-us-map" class="section level3">
 <h3>US MAP</h3>
+<<<<<<< HEAD
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="out6fcb8d55cef65408" style="width:100%; height:400px; " class="plotly html-widget html-widget-output shiny-report-size"></div>
+</div>
+<div id="section-variable-descriptions" class="section level3">
+<h3>Variable Descriptions</h3>
+<p><strong>% pregnancies ending in abortion</strong> Percent of pregnancies in a given state that ended in abortion</p>
+<p><strong>% living in a county with no abortion provider</strong> Percent of women aged 15-44 living in a county that does not have an abortion provider</p>
+<p><strong>Contraceptive Expenditure Rate</strong> Total state public funding for contraception divided by the number of women aged 13-44 in likely need of contraceptive services and supplies</p>
+<p><strong>Teen Birth Rate</strong> Number of births per 1000 women aged 15-19</p>
+=======
 </div>
 <div id="section-variable-descriptions" class="section level3">
 <h3>Variable Descriptions</h3>
@@ -2630,6 +2672,7 @@ window.FlexDashboardComponents.push({
 <p><strong>Percent of women living in a county with no abortion provider</strong> Percent of women aged 15-44 living in a county that does not have an abortion provider</p>
 <p><strong>Contraceptive Expenditure Rate</strong> Total state public funding for contraception divided by the number of women aged 13-44 in likely need of contraceptive services and supplies</p>
 <p><strong>Teen Birth Rate</strong> Number of births per 1000 mothers aged 15-19</p>
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
 </div>
 </div>
 
@@ -2651,6 +2694,115 @@ $(document).ready(function () {
 });
 </script>
 
+<<<<<<< HEAD
+<div id="flexdashboard-source-code">
+<pre class="line-numbers"><code class="language-r">---
+title: "Maps"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+runtime: shiny
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+library(flexdashboard)
+library(shiny)
+library(plotly)
+library(tidyverse)
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# read in project data
+merge_data = read_csv("./data/merge_data.csv") %>% 
+  mutate_if(is.numeric, round, digits = 2) %>%  # round to 2 decimal places
+  select(state_id, percent_abortion, percent_women_no_provider, expenditure_rate, birthrate_15_19_state) %>% 
+  rename(
+    state = state_id,
+    "% pregnancies ending in abortion" = percent_abortion,
+    "% living in a county with no abortion provider" = percent_women_no_provider,
+    "Contraceptive Expenditure Rate" = expenditure_rate,
+    "Teen Birth Rate" = birthrate_15_19_state
+  ) %>% 
+  pivot_longer("% pregnancies ending in abortion":"Teen Birth Rate",
+    names_to = "type_variable",
+    values_to = "Measure"
+  )
+
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r echo = FALSE}
+type_variable <- (merge_data %>% distinct(type_variable) %>% pull())
+
+# selectInput("variable_type", label = h3("Family planning variable"),
+#             choices = type_variable, selected = "Abortion Rate")
+
+```
+
+
+Column {.tabset}
+-----------------------------------------------------------------------
+
+### US MAP
+
+```{r echo=FALSE}
+renderPlotly({
+  geo1 <- list(
+    scope = "usa",
+    projection = list(type =  "state"),
+    showlakes = TRUE,
+    lakecolor = toRGB("white")
+  )
+  
+  merge_data %>% 
+    filter(type_variable == input$variable_type) %>% 
+    plot_geo(locationmode = "USA-states") %>% 
+    add_trace(
+      z = ~Measure,
+      locations = ~state,
+      color = ~Measure,
+      colors = "inferno",
+      reversescale = TRUE,
+      text = ~paste(type_variable)
+    ) %>% 
+    layout(
+      geo = geo1,
+      title = "Family Planning Statistics by State",
+      legend = list(x = 100, y = 0.5)
+    )
+})
+
+
+```
+
+### Variable Descriptions
+
+**% pregnancies ending in abortion**
+Percent of pregnancies in a given state that ended in abortion
+
+**% living in a county with no abortion provider**
+Percent of women aged 15-44 living in a county that does not have an abortion provider
+
+**Contraceptive Expenditure Rate**
+Total state public funding for contraception divided by the number of women aged 13-44 in likely need of contraceptive services and supplies
+
+**Teen Birth Rate**
+Number of births per 1000 women aged 15-19
+
+```{r eval=FALSE, include=FALSE}
+#rsconnect::deployApp("./maps.Rmd")
+```
+</code></pre>
+</div>
+=======
+>>>>>>> 94182ba4f03a820e8ff2c701a289fddc2ed24d7a
 <script type="text/javascript">
 $(document).ready(function () {
   FlexDashboard.init({
